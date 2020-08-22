@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:log_hour/ui/android/widgets/nav_bar.dart';
-import 'package:log_hour/ui/android/widgets/time_button.dart';
+import 'package:work_flag/blocs/checkpoint.dart';
+import 'package:work_flag/persistence/databases/app_database.dart';
+import 'package:work_flag/ui/android/widgets/nav_bar.dart';
+import 'package:work_flag/ui/android/widgets/time_button.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -20,6 +22,15 @@ class _HomePageState extends State<HomePage> {
       start = true;
       stop = !start;
     });
+
+    final CheckpointBloc checkpoint = new CheckpointBloc(
+      date: DateTime.now(),
+      start: DateTime.now(),
+    );
+
+    save(checkpoint).then((id) {
+      findLast().then((checkpoints) => debugPrint(checkpoints.toString()));
+    });
   }
 
   _alterButtonStop() {
@@ -27,6 +38,13 @@ class _HomePageState extends State<HomePage> {
       start = false;
       stop = !start;
     });
+
+    findLast().then((map) {
+      map.stop = DateTime.now();
+      updateCheckpoint(map);
+    });
+
+    Future.delayed(Duration(seconds: 1)).then((value) => findLast().then((checkpoints) => debugPrint(checkpoints.toString())));
   }
 
   @override
@@ -34,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(
-        title: Text(widget.title ?? 'Teste'),
+        title: Text(widget.title ?? "Test"),
       ),
       backgroundColor: Theme.of(context).primaryColor,
       body: AnimatedContainer(
