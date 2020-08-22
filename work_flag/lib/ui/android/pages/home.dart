@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:log_hour/ui/android/widgets/nav.bar.dart';
-import 'package:log_hour/ui/android/widgets/time-button.widget.dart';
+import 'package:log_hour/ui/android/widgets/nav_bar.dart';
+import 'package:log_hour/ui/android/widgets/time_button.dart';
 
 class HomePage extends StatefulWidget {
   final String title;

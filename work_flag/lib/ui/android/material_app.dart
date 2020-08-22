@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:log_hour/ui/android/pages/home.page.dart';
+import 'package:log_hour/ui/android/pages/home.dart';
 
 class MyMaterialApp extends StatelessWidget {
   var name = 'Marcador Horas';

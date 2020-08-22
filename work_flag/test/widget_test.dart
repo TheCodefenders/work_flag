@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:log_hour/main.dart';
-import 'package:log_hour/ui/android/material-app.dart';
+import 'package:log_hour/ui/android/material_app.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
