@@ -12,8 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var start = true;
-  var stop = false;
+  var start = false;
+  var stop = true;
 
   _alterButtonStart() {
     setState(() {

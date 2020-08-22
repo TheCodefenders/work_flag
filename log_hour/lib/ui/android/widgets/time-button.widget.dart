@@ -37,7 +37,7 @@ class Button extends StatelessWidget {
             fontFamily: "Big Shoulders Display",
           ),
         ),
-        onPressed: func,
+        onPressed: busy ? () => {} : func,
       ),
     );
   }
