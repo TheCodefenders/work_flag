@@ -1,4 +1,4 @@
-package com.example.log_hour
+package com.example.work_flag
 
 import io.flutter.embedding.android.FlutterActivity
 
