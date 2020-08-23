@@ -3,6 +3,7 @@ import 'package:work_flag/blocs/checkpoint.dart';
 import 'package:work_flag/persistence/databases/app_database.dart';
 import 'package:work_flag/ui/android/widgets/nav_bar.dart';
 import 'package:work_flag/ui/android/widgets/time_button.dart';
+import '../../../infrastructure/location.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var start = false;
   var stop = true;
+  var location = new Location();
 
   _alterButtonStart() {
     setState(() {
@@ -23,28 +25,42 @@ class _HomePageState extends State<HomePage> {
       stop = !start;
     });
 
-    final CheckpointBloc checkpoint = new CheckpointBloc(
-      date: DateTime.now(),
-      start: DateTime.now(),
-    );
+    Future.delayed(Duration(seconds: 1)).then(
+      (value) => location.getAddressFromLatLgn().then(
+        (value) {
+          CheckpointBloc checkpoint = new CheckpointBloc(
+              date: DateTime.now(), start: DateTime.now(), address: value);
 
-    save(checkpoint).then((id) {
-      findLast().then((checkpoints) => debugPrint(checkpoints.toString()));
-    });
+          save(checkpoint).then((id) {
+            findLast()
+                .then((checkpoints) => debugPrint(checkpoints.toString()));
+          });
+        },
+      ),
+    );
   }
 
   _alterButtonStop() {
-    setState(() {
-      start = false;
-      stop = !start;
-    });
-
     findLast().then((map) {
-      map.stop = DateTime.now();
-      updateCheckpoint(map);
-    });
+      Future.delayed(Duration(seconds: 1)).then((dl) {
+        location.IsSameLocation(map.address).then((isSame) {
+          if (isSame == true) {
+            setState(() {
+              start = false;
+              stop = !start;
+            });
 
-    Future.delayed(Duration(seconds: 1)).then((value) => findLast().then((checkpoints) => debugPrint(checkpoints.toString())));
+            map.stop = DateTime.now();
+            updateCheckpoint(map);
+
+            Future.delayed(Duration(seconds: 1)).then((value) => findLast()
+                .then((checkpoints) => debugPrint(checkpoints.toString())));
+          } else {
+            _showMyDialog();
+          }
+        });
+      });
+    });
   }
 
   @override
@@ -77,6 +93,34 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Erro ao salvar'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'A localização de encerramento deve ser a mesma do inicio'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
