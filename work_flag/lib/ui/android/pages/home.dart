@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   _alterButtonStop() {
     findLast().then((map) {
       Future.delayed(Duration(seconds: 1)).then((dl) {
-        location.IsSameLocation(map.address).then((isSame) {
+        location.isSameLocation(map.address).then((isSame) {
           if (isSame == true) {
             setState(() {
               start = false;

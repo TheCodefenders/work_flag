@@ -30,7 +30,10 @@ class Location {
     }
   }
 
-  Future<bool> IsSameLocation(String locationDb) async {
+  Future<bool> isSameLocation(String locationDb) async {
+    if(locationDb == "")
+      return true;
+
     var nowLocation = await getAddressFromLatLgn();
 
     return nowLocation == locationDb;
