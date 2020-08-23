@@ -26,6 +26,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             ),
       home: HomePage(
         title: name,
+        isDarkMode: widget.isDarkMode,
       ),
     );
   }

@@ -7,8 +7,9 @@ import '../../../infrastructure/location.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
+  final bool isDarkMode;
 
-  const HomePage({Key key, this.title}) : super(key: key);
+  const HomePage({Key key, this.title, this.isDarkMode}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -78,8 +79,9 @@ class _HomePageState extends State<HomePage> {
         color: Colors.blueGrey,
         child: ListView(
           children: <Widget>[
-            Image.network(
-                "https://media.giphy.com/media/3orieMd0OXjo8YU7GU/giphy.gif"),
+            widget.isDarkMode
+                ? Image.asset("assets/images/home_dark_mode.gif")
+                : Image.asset("assets/images/home_light_mode.gif"),
             Button(
               busy: start,
               invert: !start,
