@@ -8,8 +8,10 @@ import '../../../infrastructure/location.dart';
 class HomePage extends StatefulWidget {
   final String title;
   final bool isDarkMode;
+  bool isStarted = false;
+  String address = "";
 
-  const HomePage({Key key, this.title, this.isDarkMode}) : super(key: key);
+  HomePage({Key key, this.title, this.isDarkMode}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -24,13 +26,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       start = true;
       stop = !start;
+      widget.isStarted = true;
     });
+
 
     Future.delayed(Duration(seconds: 1)).then(
       (value) => location.getAddressFromLatLgn().then(
         (value) {
           CheckpointBloc checkpoint = new CheckpointBloc(
               date: DateTime.now(), start: DateTime.now(), address: value);
+
+          setState(() {
+            widget.address = value ?? "";
+          });
 
           save(checkpoint).then((id) {
             findLast()
@@ -49,6 +57,7 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               start = false;
               stop = !start;
+              widget.isStarted = false;
             });
 
             map.stop = DateTime.now();
@@ -56,6 +65,7 @@ class _HomePageState extends State<HomePage> {
 
             Future.delayed(Duration(seconds: 1)).then((value) => findLast()
                 .then((checkpoints) => debugPrint(checkpoints.toString())));
+
           } else {
             _showMyDialog();
           }
@@ -82,21 +92,35 @@ class _HomePageState extends State<HomePage> {
             widget.isDarkMode
                 ? Image.asset("assets/images/home_dark_mode.gif")
                 : Image.asset("assets/images/home_light_mode.gif"),
-            Button(
-              busy: start,
-              invert: !start,
-              text: "Start",
-              func: _alterButtonStart,
-            ),
-            Button(
-              busy: stop,
-              invert: !stop,
-              text: "Stop",
-              func: _alterButtonStop,
-            ),
+            !widget.isStarted
+                ? Button(
+                    busy: start,
+                    invert: !start,
+                    text: "Start",
+                    func: _alterButtonStart,
+                  )
+                : Button(
+                    busy: stop,
+                    invert: !stop,
+                    text: "Stop",
+                    func: _alterButtonStop,
+                  ),
           ],
         ),
       ),
+      persistentFooterButtons: [
+        Container(
+          width: 900,
+          child: Text(
+            widget.address,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              letterSpacing: 1,
+            ),
+          ),
+        )
+      ],
     );
   }
 
