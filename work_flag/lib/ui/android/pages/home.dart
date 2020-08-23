@@ -78,6 +78,8 @@ class _HomePageState extends State<HomePage> {
         color: Colors.blueGrey,
         child: ListView(
           children: <Widget>[
+            Image.network(
+                "https://media.giphy.com/media/3orieMd0OXjo8YU7GU/giphy.gif"),
             Button(
               busy: start,
               invert: !start,
