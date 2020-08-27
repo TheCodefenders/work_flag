@@ -2,13 +2,20 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_flag/ui/android/theme/app_themes.dart';
+import '../../../../app.dart';
 import './bloc.dart';
 import '../app_themes.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
+  AppTheme getTheme() {
+    return App.blocInnitPreference.getBool("lightMode")
+        ? AppTheme.Light
+        : AppTheme.Dark;
+  }
+
   @override
   ThemeState get initialState =>
-      ThemeState(themeData: appThemeData[AppTheme.Light]);
+      ThemeState(themeData: appThemeData[getTheme()]);
 
   @override
   Stream<ThemeState> mapEventToState(

@@ -4,8 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_flag/ui/android/pages/home.dart';
 import 'package:work_flag/ui/android/theme/bloc/bloc.dart';
 import 'package:work_flag/ui/android/theme/bloc/theme_bloc.dart';
-import 'package:work_flag/ui/android/theme/bloc/theme_bloc.dart';
-import 'package:work_flag/ui/android/theme/bloc/theme_bloc.dart';
 
 import 'theme/bloc/theme_bloc.dart';
 
@@ -88,8 +86,10 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Center(
-      child: CircularProgressIndicator(),
-    ));
+      alignment: Alignment.center,
+      child: CircularProgressIndicator(
+        backgroundColor: Theme.of(context).accentColor,
+      ),
+    );
   }
 }
