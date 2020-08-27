@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_flag/blocs/checkpoint.dart';
 import 'package:work_flag/persistence/databases/app_database.dart';
+import 'package:work_flag/ui/android/widgets/home_image.dart';
 import 'package:work_flag/ui/android/widgets/nav_bar.dart';
 import 'package:work_flag/ui/android/widgets/time_button.dart';
 import '../../../infrastructure/location.dart';
@@ -106,13 +107,7 @@ class _HomePageState extends State<HomePage> {
         color: start ? Colors.black87 : Colors.black45,
         child: ListView(
           children: <Widget>[
-            isLightModeMode
-                ? Image.asset(
-                    "assets/images/home_light_mode.gif",
-                  )
-                : Image.asset(
-                    "assets/images/home_dark_mode.gif",
-                  ),
+            HomeImages(),
             !widget.isStarted
                 ? Button(
                     busy: start,
