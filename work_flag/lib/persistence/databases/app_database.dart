@@ -61,7 +61,7 @@ Future<CheckpointBloc> findLast() {
   });
 }
 
-Future updateCheckpoint(CheckpointBloc checkpoint) {
+updateCheckpoint(CheckpointBloc checkpoint) {
   createDatabase().then((db) {
     db.update("checkpoint", checkpoint.toMap(),
         where: "id = ?", whereArgs: [checkpoint.id]);
