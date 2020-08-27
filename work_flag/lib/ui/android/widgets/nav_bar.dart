@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:work_flag/ui/android/pages/checkpoints_list.dart';
+import 'package:work_flag/ui/android/pages/home.dart';
 import 'package:work_flag/ui/android/theme/app_themes.dart';
 import 'package:work_flag/ui/android/theme/bloc/bloc.dart';
 import 'package:work_flag/ui/android/widgets/preference_theme.dart';
@@ -15,6 +17,10 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
+  _NavDrawerState() {
+    load();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -37,12 +43,18 @@ class _NavDrawerState extends State<NavDrawer> {
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Home'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => HomePage()))
+            },
           ),
           ListTile(
             leading: Icon(Icons.access_time),
             title: Text('Histórico de marcação'),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CheckpointList()))
+            },
           ),
           ListTile(
             leading: Icon(Icons.settings),
@@ -73,16 +85,11 @@ class _NavDrawerState extends State<NavDrawer> {
     );
   }
 
-  _NavDrawerState() {
-    load();
-  }
-
-  Future load() async {
-    var prefs = await SharedPreferences.getInstance();
-    var data = prefs.getBool('lightMode') ?? true;
-
-    setState(() {
-      widget.lights = data;
+  load() {
+    SharedPreferences.getInstance().then((value) {
+      setState(() {
+        widget.lights = value.getBool('lightMode') ?? true;
+      });
     });
   }
 }

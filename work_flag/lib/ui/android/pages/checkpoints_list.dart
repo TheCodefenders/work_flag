@@ -1,14 +1,39 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_flag/blocs/checkpoint.dart';
 import 'package:work_flag/persistence/databases/app_database.dart';
 import 'package:work_flag/ui/android/widgets/nav_bar.dart';
 
-class CheckpointList extends StatelessWidget {
+class CheckpointList extends StatefulWidget{
+  SharedPreferences mainSharedPreferences;
+
+  CheckpointList({Key key, this.mainSharedPreferences}) : super(key : key);
+
+  @override
+  _CheckpointListState createState() => _CheckpointListState();
+}
+
+class _CheckpointListState extends State<CheckpointList> {
+  bool isLightModeMode;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadApp();
+  }
+
+  _loadApp() {
+    isLightModeMode =
+        widget.mainSharedPreferences?.getBool("lightMode") ?? true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
+      drawer: NavDrawer(
+        lights: isLightModeMode,
+      ),
       appBar: AppBar(
         title: Text("Checkpoints"),
       ),
