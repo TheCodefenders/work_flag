@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'pages/home.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:work_flag/ui/android/pages/home.dart';
+import 'package:work_flag/ui/android/theme/bloc/bloc.dart';
+import 'package:work_flag/ui/android/theme/bloc/theme_bloc.dart';
+import 'package:work_flag/ui/android/theme/bloc/theme_bloc.dart';
+import 'package:work_flag/ui/android/theme/bloc/theme_bloc.dart';
+
+import 'theme/bloc/theme_bloc.dart';
 
 class MyMaterialApp extends StatefulWidget {
-  final bool isDarkMode;
-
-  const MyMaterialApp({Key key, this.isDarkMode}) : super(key: key);
+  static SharedPreferences mainSharedPreferences;
 
   @override
   _MyMaterialAppState createState() => _MyMaterialAppState();
@@ -13,21 +19,77 @@ class MyMaterialApp extends StatefulWidget {
 class _MyMaterialAppState extends State<MyMaterialApp> {
   var name = 'Marcador Horas';
 
+  Future _loadApp() async {
+    MyMaterialApp.mainSharedPreferences = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadApp();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: name,
-      debugShowCheckedModeBanner: false,
-      theme: widget.isDarkMode
-          ? ThemeData.dark()
-          : ThemeData(
-              primarySwatch: Colors.blue,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-      home: HomePage(
-        title: name,
-        isDarkMode: widget.isDarkMode,
+    return BlocProvider(
+      builder: (context) => ThemeBloc(),
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: _builderWithTheme,
       ),
     );
+  }
+
+  Widget _builderWithTheme(BuildContext context, ThemeState state) {
+    return MaterialApp(
+      title: name,
+      theme: state.themeData,
+      debugShowCheckedModeBanner: false,
+      home: LoadingPage(
+        title: name,
+      ),
+      routes: {
+        '/home': (context) => HomePage(
+              title: name,
+            ),
+      },
+    );
+  }
+}
+
+class LoadingPage extends StatefulWidget {
+  String title;
+  LoadingPage({Key key, this.title}) : super(key: key);
+
+  _LoadingPageState createState() => _LoadingPageState();
+}
+
+class _LoadingPageState extends State<LoadingPage> {
+  @override
+  void initState() {
+    super.initState();
+    loadPage();
+  }
+
+  Future<SharedPreferences> getSharedPrefs() async {
+    return await SharedPreferences.getInstance();
+  }
+
+  loadPage() {
+    getSharedPrefs().then((prefs) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => HomePage(
+          mainSharedPreferences: prefs,
+          title: widget.title,
+        ),
+      ));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Center(
+      child: CircularProgressIndicator(),
+    ));
   }
 }

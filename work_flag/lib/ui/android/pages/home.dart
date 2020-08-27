@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_flag/blocs/checkpoint.dart';
 import 'package:work_flag/persistence/databases/app_database.dart';
 import 'package:work_flag/ui/android/widgets/nav_bar.dart';
@@ -7,20 +8,32 @@ import '../../../infrastructure/location.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
-  final bool isDarkMode;
+  SharedPreferences mainSharedPreferences;
   bool isStarted = false;
   String address = "";
 
-  HomePage({Key key, this.title, this.isDarkMode}) : super(key: key);
+  HomePage({Key key, this.title, this.mainSharedPreferences}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isLightModeMode;
   var start = false;
   var stop = true;
   var location = new Location();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadApp();
+  }
+
+  _loadApp() {
+    isLightModeMode =
+        widget.mainSharedPreferences?.getBool("lightMode") ?? true;
+  }
 
   _alterButtonStart() {
     setState(() {
@@ -28,7 +41,6 @@ class _HomePageState extends State<HomePage> {
       stop = !start;
       widget.isStarted = true;
     });
-
 
     Future.delayed(Duration(seconds: 1)).then(
       (value) => location.getAddressFromLatLgn().then(
@@ -66,6 +78,9 @@ class _HomePageState extends State<HomePage> {
             Future.delayed(Duration(seconds: 1)).then((value) => findLast()
                 .then((checkpoints) => debugPrint(checkpoints.toString())));
 
+            setState(() {
+              widget.address = "";
+            });
           } else {
             _showMyDialog();
           }
@@ -77,7 +92,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
+      drawer: NavDrawer(
+        lights: isLightModeMode,
+      ),
       appBar: AppBar(
         title: Text(widget.title ?? "Test"),
       ),
@@ -86,12 +103,16 @@ class _HomePageState extends State<HomePage> {
         duration: Duration(
           milliseconds: 1200,
         ),
-        color: Colors.blueGrey,
+        color: start ? Colors.black87 : Colors.black45,
         child: ListView(
           children: <Widget>[
-            widget.isDarkMode
-                ? Image.asset("assets/images/home_dark_mode.gif")
-                : Image.asset("assets/images/home_light_mode.gif"),
+            isLightModeMode
+                ? Image.asset(
+                    "assets/images/home_light_mode.gif",
+                  )
+                : Image.asset(
+                    "assets/images/home_dark_mode.gif",
+                  ),
             !widget.isStarted
                 ? Button(
                     busy: start,
