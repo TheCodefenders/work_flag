@@ -16,8 +16,8 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(30),
-      height: 60,
+      margin: EdgeInsets.all(80),
+      height: 70,
       width: double.infinity,
       decoration: BoxDecoration(
           color: invert
@@ -34,7 +34,6 @@ class Button extends StatelessWidget {
                 ? Colors.white.withOpacity(0.8)
                 : Theme.of(context).primaryColor,
             fontSize: 25,
-            fontFamily: "Big Shoulders Display",
           ),
         ),
         onPressed: busy ? () => {} : func,
