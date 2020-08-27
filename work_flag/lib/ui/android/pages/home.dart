@@ -33,9 +33,22 @@ class _HomePageState extends State<HomePage> {
   _loadApp() {
     isLightModeMode =
         widget.mainSharedPreferences?.getBool("lightMode") ?? true;
+
+    findLast().then((map) {
+      Future.delayed(Duration(milliseconds: 500)).then((dl) {
+        if (map.stop == null) {
+          setState(() {
+            start = true;
+            stop = !start;
+            widget.isStarted = true;
+          });
+        }
+      });
+    });
   }
 
   _alterButtonStart() {
+
     setState(() {
       start = true;
       stop = !start;
