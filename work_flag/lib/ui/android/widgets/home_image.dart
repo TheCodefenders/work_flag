@@ -43,7 +43,23 @@ class _HomeImagesState extends State<HomeImages> {
   Widget image() {
     return FutureBuilder<Image>(
       future: getImageByPreferences(),
-      builder: (context, snapshot) => snapshot.data,
+      builder: (context, snapshot) {
+        switch(snapshot.connectionState){
+          case ConnectionState.none:
+            // TODO: Handle this case.
+            break;
+          case ConnectionState.waiting:
+            // TODO: Handle this case.
+            break;
+          case ConnectionState.active:
+            // TODO: Handle this case.
+            break;
+          case ConnectionState.done:
+            return snapshot.data;
+            break;
+        }
+        return Center(child: Text("Unknown error"));
+      },
     );
   }
 }
