@@ -5,10 +5,10 @@ import 'package:work_flag/blocs/checkpoint.dart';
 import 'package:work_flag/persistence/databases/app_database.dart';
 import 'package:work_flag/ui/android/widgets/nav_bar.dart';
 
-class CheckpointList extends StatefulWidget{
+class CheckpointList extends StatefulWidget {
   SharedPreferences mainSharedPreferences;
 
-  CheckpointList({Key key, this.mainSharedPreferences}) : super(key : key);
+  CheckpointList({Key key, this.mainSharedPreferences}) : super(key: key);
 
   @override
   _CheckpointListState createState() => _CheckpointListState();
@@ -31,9 +31,7 @@ class _CheckpointListState extends State<CheckpointList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(
-        lights: isLightModeMode,
-      ),
+      drawer: NavDrawer(),
       appBar: AppBar(
         title: Text("Checkpoints"),
       ),
@@ -95,7 +93,7 @@ class _CheckpointItem extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.5,
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.only(top:18.0),
+              padding: const EdgeInsets.only(top: 18.0),
               child: ListTile(
                 title: Text(checkpoint.date.toString().substring(0, 10),
                     textAlign: TextAlign.center,
@@ -156,10 +154,7 @@ class _CheckpointItem extends StatelessWidget {
                   child: Card(
                     child: Text(
                         checkpoint.stop != null
-                            ? "Total: ${checkpoint.stop
-                                  .difference(checkpoint.start)
-                                  .toString().split(".").first
-                                }"
+                            ? "Total: ${checkpoint.stop.difference(checkpoint.start).toString().split(".").first}"
                             : "Not Finished!",
                         textAlign: TextAlign.center,
                         style: TextStyle(
