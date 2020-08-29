@@ -11,7 +11,7 @@ final loading = {
 
 class Loading extends StatelessWidget {
   LoadingType mode;
-  int width;
+  double width;
 
   Loading(this.mode, {this.width});
 
@@ -19,7 +19,7 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(
       loading[this.mode],
-      width: 80,
+      width: this.width ?? 80,
     );
   }
 }
