@@ -24,6 +24,7 @@ class _LocationFooterState extends State<LocationFooter> {
               break;
             case ConnectionState.waiting:
               return Loading();
+              break;
             case ConnectionState.active:
               // TODO: Handle this case.
               break;
@@ -43,6 +44,7 @@ class _LocationFooterState extends State<LocationFooter> {
                       )
                     : Text(""),
               );
+              break;
           }
           return Center(child: Text("Unknown error"));
         });

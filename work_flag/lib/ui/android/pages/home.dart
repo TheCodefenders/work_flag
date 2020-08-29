@@ -114,9 +114,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(
-        lights: isLightModeMode,
-      ),
+      drawer: NavDrawer(),
       appBar: AppBar(
         title: Text(widget.title ?? "Test"),
       ),

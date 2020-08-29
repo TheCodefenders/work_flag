@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:work_flag/ui/android/widgets/loading.dart';
 
 class HomeImages extends StatefulWidget {
   final images = {
@@ -44,12 +45,12 @@ class _HomeImagesState extends State<HomeImages> {
     return FutureBuilder<Image>(
       future: getImageByPreferences(),
       builder: (context, snapshot) {
-        switch(snapshot.connectionState){
+        switch (snapshot.connectionState) {
           case ConnectionState.none:
             // TODO: Handle this case.
             break;
           case ConnectionState.waiting:
-            // TODO: Handle this case.
+            return Loading();
             break;
           case ConnectionState.active:
             // TODO: Handle this case.
