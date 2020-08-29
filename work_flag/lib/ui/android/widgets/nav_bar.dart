@@ -28,18 +28,19 @@ class _NavDrawerState extends State<NavDrawer> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-              child: Text(
-                'Opções',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 20,
-                ),
+            child: Text(
+              'Opções',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: 20,
               ),
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor)
-//                image: DecorationImage(
-//                    fit: BoxFit.fill,
-//                    image: AssetImage('assets/images/cover.jpg'))),
-              ),
+            ),
+            decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                image: DecorationImage(
+                    fit: BoxFit.scaleDown,
+                    image: AssetImage("assets/images/options.gif"))),
+          ),
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Home'),
