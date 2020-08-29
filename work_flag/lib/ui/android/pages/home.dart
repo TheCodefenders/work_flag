@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:work_flag/blocs/checkpoint.dart';
 import 'package:work_flag/persistence/databases/app_database.dart';
 import 'package:work_flag/ui/android/widgets/home_image.dart';
+import 'package:work_flag/ui/android/widgets/location_footer.dart';
 import 'package:work_flag/ui/android/widgets/nav_bar.dart';
 import 'package:work_flag/ui/android/widgets/time_button.dart';
 import '../../../infrastructure/location.dart';
@@ -12,8 +13,14 @@ class HomePage extends StatefulWidget {
   SharedPreferences mainSharedPreferences;
   bool isStarted = false;
   String address = "";
+  Location location;
 
-  HomePage({Key key, this.title, this.mainSharedPreferences}) : super(key: key);
+  HomePage({
+    Key key,
+    this.title,
+    this.mainSharedPreferences,
+    this.address,
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -23,7 +30,6 @@ class _HomePageState extends State<HomePage> {
   bool isLightModeMode;
   var start = false;
   var stop = true;
-  var location = new Location();
 
   @override
   void initState() {
@@ -34,6 +40,9 @@ class _HomePageState extends State<HomePage> {
   _loadApp() {
     isLightModeMode =
         widget.mainSharedPreferences?.getBool("lightMode") ?? true;
+
+    widget.location = new Location();
+    widget.location.getAddressFromLatLgn();
 
     findLast().then((map) {
       Future.delayed(Duration(milliseconds: 500)).then((dl) {
@@ -49,7 +58,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   _alterButtonStart() {
-
     setState(() {
       start = true;
       stop = !start;
@@ -57,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     });
 
     Future.delayed(Duration(seconds: 1)).then(
-      (value) => location.getAddressFromLatLgn().then(
+      (value) => widget.location.getAddressFromLatLgn().then(
         (value) {
           CheckpointBloc checkpoint = new CheckpointBloc(
               date: DateTime.now(), start: DateTime.now(), address: value);
@@ -78,7 +86,7 @@ class _HomePageState extends State<HomePage> {
   _alterButtonStop() {
     findLast().then((map) {
       Future.delayed(Duration(seconds: 1)).then((dl) {
-        location.isSameLocation(map.address).then((isSame) {
+        widget.location.isSameLocation(map.address).then((isSame) {
           if (isSame == true) {
             setState(() {
               start = false;
@@ -138,17 +146,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       persistentFooterButtons: [
-        Container(
-          width: 900,
-          child: Text(
-            widget.address,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              letterSpacing: 1,
-            ),
-          ),
-        )
+        LocationFooter(),
       ],
     );
   }
