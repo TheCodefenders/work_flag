@@ -52,7 +52,7 @@ class _BulbLightState extends State<BulbLight> {
             // TODO: Handle this case.
             break;
           case ConnectionState.waiting:
-            return Loading();
+            return Loading(LoadingType.Light, width: 50);
             break;
           case ConnectionState.active:
             // TODO: Handle this case.

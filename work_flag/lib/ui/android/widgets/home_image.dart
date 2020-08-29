@@ -50,7 +50,7 @@ class _HomeImagesState extends State<HomeImages> {
             // TODO: Handle this case.
             break;
           case ConnectionState.waiting:
-            return Loading();
+            return Loading(LoadingType.Home);
             break;
           case ConnectionState.active:
             // TODO: Handle this case.
