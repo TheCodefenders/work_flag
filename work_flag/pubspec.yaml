@@ -55,6 +55,7 @@ flutter:
   assets:
     - assets/images/home_dark_mode.gif
     - assets/images/home_light_mode.gif
+    - assets/images/options.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

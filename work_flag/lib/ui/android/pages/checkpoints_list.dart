@@ -33,9 +33,7 @@ class _CheckpointListState extends State<CheckpointList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(
-        lights: isLightModeMode,
-      ),
+      drawer: NavDrawer(),
       appBar: AppBar(
         title: Text("Checkpoints"),
       ),
