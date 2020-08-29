@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 import 'package:work_flag/blocs/checkpoint.dart';
 import 'package:work_flag/persistence/databases/app_database.dart';
+import 'package:work_flag/ui/android/widgets/checkpoint_time_view.dart';
 import 'package:work_flag/ui/android/widgets/nav_bar.dart';
 
-class CheckpointList extends StatefulWidget{
+class CheckpointList extends StatefulWidget {
   SharedPreferences mainSharedPreferences;
 
-  CheckpointList({Key key, this.mainSharedPreferences}) : super(key : key);
+  CheckpointList({Key key, this.mainSharedPreferences}) : super(key: key);
 
   @override
   _CheckpointListState createState() => _CheckpointListState();
@@ -69,11 +71,21 @@ class _CheckpointListState extends State<CheckpointList> {
               }
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  index = checkpoints.length - index - 1;
-                  final CheckpointBloc checkpoint = checkpoints[index];
-                  return _CheckpointItem(checkpoint);
+                    return StickyHeader(
+                      header: Container(
+                        height: 50.0,
+                        color: Colors.blueGrey[700],
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        alignment: Alignment.centerLeft,
+                        child: Text("Data: ${checkpoints[index].date.toString().substring(0, 10)}",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+
+                      content: ListComponent(index, checkpoints),
+                    );
                 },
-                itemCount: checkpoints?.length ?? 0,
+                itemCount: checkpoints.length ?? 0,
               );
               break;
           }
@@ -81,6 +93,12 @@ class _CheckpointListState extends State<CheckpointList> {
         },
       ),
     );
+  }
+
+  _CheckpointItem ListComponent(int index, List<CheckpointBloc> checkpoints) {
+    index = checkpoints.length - index - 1;
+    final CheckpointBloc checkpoint = checkpoints[index];
+    return _CheckpointItem(checkpoint);
   }
 }
 
@@ -90,87 +108,45 @@ class _CheckpointItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: <Widget>[
-      Container(
-          height: 100,
-          width: MediaQuery.of(context).size.width * 0.5,
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.only(top:18.0),
-              child: ListTile(
-                title: Text(checkpoint.date.toString().substring(0, 10),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 15.2,
-                      fontWeight: FontWeight.bold,
-                    )),
-                subtitle: Text(checkpoint?.address ?? "",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ),
-            ),
-          )),
       Column(
         children: [
           Row(
             children: [
-              Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width * 0.25,
-                  child: Card(
-                    child:
-                        Text("${checkpoint.start.toString().substring(11, 19)}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.green,
-                              height: 3.0,
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.bold,
-                            )),
-                  )),
-              Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width * 0.25,
-                  child: Card(
-                    child: Text(
-                        checkpoint.stop != null
-                            ? checkpoint.stop.toString().substring(11, 19)
-                            : "Not Finished!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.red,
-                          height: 3.0,
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  )),
+              CheckpointTimeView(
+                checkpoint.start.toString().substring(11, 19),
+                Colors.green,
+                0.5,
+              ),
+              CheckpointTimeView(
+                checkpoint.stop != null
+                    ? checkpoint.stop.toString().substring(11, 19)
+                    : "Not Finished!",
+                Colors.red,
+                0.5,
+              ),
             ],
           ),
           Row(
             children: [
-              Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Card(
-                    child: Text(
-                        checkpoint.stop != null
-                            ? "Total: ${checkpoint.stop
-                                  .difference(checkpoint.start)
-                                  .toString().split(".").first
-                                }"
-                            : "Not Finished!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          height: 3.0,
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  )),
+              CheckpointTimeView(
+                checkpoint.stop != null
+                    ? "Total: ${checkpoint.stop.difference(checkpoint.start).toString().split(".").first}"
+                    : "Not Finished!",
+                Colors.black,
+                1,
+              ),
             ],
-          )
+          ),
+          checkpoint.address != null && checkpoint.address != "" ?
+          Row(
+            children: [
+              CheckpointTimeView(
+                checkpoint.address,
+                Colors.black,
+                1,
+              ),
+            ],
+          ) : new Container(width: 0, height: 0)
         ],
       ),
     ]);
