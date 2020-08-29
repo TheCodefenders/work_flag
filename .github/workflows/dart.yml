@@ -17,6 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
+      working-directory: ./work_flag
       run: pub get
     - name: Run tests
       run: pub run test
