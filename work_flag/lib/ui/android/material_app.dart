@@ -16,7 +16,7 @@ class MyMaterialApp extends StatefulWidget {
 }
 
 class _MyMaterialAppState extends State<MyMaterialApp> {
-  var name = 'Marcador Horas';
+  var name = 'Work Flag';
 
   Future _loadApp() async {
     MyMaterialApp.mainSharedPreferences = await SharedPreferences.getInstance();
