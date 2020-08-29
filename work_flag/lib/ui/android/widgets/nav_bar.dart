@@ -18,7 +18,7 @@ class _NavDrawerState extends State<NavDrawer> {
         children: <Widget>[
           DrawerHeader(
             child: Text(
-              'Opções',
+              '',
               style: TextStyle(
                 color: Colors.white.withOpacity(0.8),
                 fontSize: 20,

@@ -23,7 +23,7 @@ class _LocationFooterState extends State<LocationFooter> {
               // TODO: Handle this case.
               break;
             case ConnectionState.waiting:
-              return Loading();
+              return Loading(LoadingType.Home);
               break;
             case ConnectionState.active:
               // TODO: Handle this case.
